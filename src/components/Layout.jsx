@@ -41,7 +41,11 @@ const Layout = ({ children }) => {
             setShowModal(false);
           }}
         >
-          <Authentication />
+          <Authentication
+            handleCloseModal={() => {
+              setShowModal(false);
+            }}
+          />
         </Modal>
       )}
       {header}

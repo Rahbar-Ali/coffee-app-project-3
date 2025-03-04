@@ -1,17 +1,44 @@
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
-const Authentication = () => {
+const Authentication = ({ handleCloseModal }) => {
   const [isRegistration, setIsRegistration] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [authenticating, setAuthenticating] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  async function handleAuthenticate() {}
+  const { signup, login } = useAuth();
+
+  async function handleAuthenticate() {
+    if (
+      !email ||
+      !email.includes("@") ||
+      !password ||
+      password.length < 8 ||
+      isAuthenticating
+    ) {
+      return;
+    }
+
+    try {
+      setIsAuthenticating(true);
+      if (isRegistration) {
+        await signup(email, password);
+      } else {
+        await login(email, password);
+      }
+      handleCloseModal();
+    } catch (err) {
+      console.log(err.message);
+    } finally {
+      setIsAuthenticating(false);
+    }
+  }
 
   return (
     <>
       <h2 className="sign-up-test">{isRegistration ? "Sign up" : "Login"}</h2>
-      <p>Sign in to your account</p>
+      <p>{isRegistration ? "Create an account" : "Sign in to your account"}</p>
       <input
         value={email}
         onChange={(e) => {
@@ -28,11 +55,15 @@ const Authentication = () => {
         type="password"
       />
       <button onClick={handleAuthenticate}>
-        <p>Submit</p>
+        <p>{isAuthenticating ? "Authenticating..." : "Submit"}</p>
       </button>
       <hr />
       <div className="register-content">
-        <p>Don&apos;t have an account</p>
+        <p>
+          {isRegistration
+            ? "Already have an account?"
+            : "Don't have an account"}
+        </p>
         <button
           onClick={() => {
             setIsRegistration(!isRegistration);
