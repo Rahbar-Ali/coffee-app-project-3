@@ -39,7 +39,6 @@ const CoffeeForm = ({ isAuthenticated }) => {
         cost: coffeeCost,
       };
       newGlobalData[timestamp] = newData;
-      console.log(timestamp, selectedCoffee, coffeeCost);
 
       setGlobalData(newGlobalData);
 
