@@ -1,9 +1,12 @@
 import { useState } from "react";
 import Authentication from "./Authentication";
 import Modal from "./Modal";
+import { useAuth } from "../context/AuthContext";
 
 const Layout = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
+
+  const { globalUser, logout } = useAuth();
 
   const header = (
     <header>
@@ -11,14 +14,20 @@ const Layout = ({ children }) => {
         <h1 className="text-gradient">COFFEEAPP</h1>
         <p>For Coffee Insatiates</p>
       </div>
-      <button
-        onClick={() => {
-          setShowModal(true);
-        }}
-      >
-        <p>Sign up free</p>
-        <i class="fa-solid fa-mug-hot" />
-      </button>
+      {globalUser ? (
+        <button onClick={logout}>
+          <p>Logout</p>
+        </button>
+      ) : (
+        <button
+          onClick={() => {
+            setShowModal(true);
+          }}
+        >
+          <p>Sign up free</p>
+          <i class="fa-solid fa-mug-hot" />
+        </button>
+      )}
     </header>
   );
 

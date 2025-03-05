@@ -5,6 +5,7 @@ const Authentication = ({ handleCloseModal }) => {
   const [isRegistration, setIsRegistration] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   const { signup, login } = useAuth();
@@ -22,6 +23,7 @@ const Authentication = ({ handleCloseModal }) => {
 
     try {
       setIsAuthenticating(true);
+      setError(null);
       if (isRegistration) {
         await signup(email, password);
       } else {
@@ -30,6 +32,7 @@ const Authentication = ({ handleCloseModal }) => {
       handleCloseModal();
     } catch (err) {
       console.log(err.message);
+      setError(err.message);
     } finally {
       setIsAuthenticating(false);
     }
@@ -39,6 +42,7 @@ const Authentication = ({ handleCloseModal }) => {
     <>
       <h2 className="sign-up-test">{isRegistration ? "Sign up" : "Login"}</h2>
       <p>{isRegistration ? "Create an account" : "Sign in to your account"}</p>
+      {error && <p>❌{error}</p>}
       <input
         value={email}
         onChange={(e) => {

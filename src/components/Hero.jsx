@@ -1,4 +1,7 @@
+import { useAuth } from "../context/AuthContext";
+
 const Hero = () => {
+  const { globalUser } = useAuth;
   return (
     <>
       <h1>
